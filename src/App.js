@@ -9,9 +9,8 @@ import RegistrAbout from "./Register/Register";
 function App() {
   return (
     <Switch>
-       <Route  path="/" component={Home} />
         <Route  path="/registration" component={RegistrAbout} />
-
+        <Route  path="/" component={Home} />
     </Switch>
   );
 }
