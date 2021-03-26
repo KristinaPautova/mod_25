@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import logo from '../../img/logo.svg';
 import { Link } from 'react-router-dom'
-import '../Header/Header.css'
+import '../Header/Header.scss'
 import '../media.css'
 
 const HeaderMobile = () => {

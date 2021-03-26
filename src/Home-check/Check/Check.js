@@ -1,6 +1,7 @@
 import React from "react";
 import "./Check.scss";
 import car5 from "../../img/car5.svg";
+import {Link} from "react-router-dom";
 
 
 
@@ -10,9 +11,9 @@ const Check = () => {
             <div className="check__container">
                 <img src={ car5 }/>
                 <h2>Попробуйте аренду на себе</h2>
-                <a href="" target='_blank' target="_blank" rel="nofollow">
-                    <button>Зарегистрироваться</button>
-                </a>
+                <Link to="/registration" className="check__container-link" rel="nofollow">
+                    <button >Зарегистрироваться</button>
+                </Link>
             </div>
         </section>
 
