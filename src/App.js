@@ -7,20 +7,16 @@ import './App.css'
 import RegistrAbout from "./Register/Register";
 import About from "./About/AboutUs/AboutUs";
 import Questions from "./Questions/Questions";
-import ResetPassword from "./Containers/ResetPass";
-import Step1 from "./Containers/Registration/Step1/Step1";
-import Success from "./Components/Registr-page/Success/Success";
+import Entrance from "./Global/Register/Entrance";
+
 
 function App() {
   return (
     <Switch>
-        <Route path="users/:id" />
-        <Route path="/reset-pass" component={ResetPassword} />
-        {/*<Route  path="/registration" component={RegistrAbout} />*/}
+        <Route  path="/registration" component={RegistrAbout} />
         <Route path="/about" component={About} />
-        <Route path="/success" component={Success} />
-        <Route path="/step1" component={Step1} />
         <Route path="/qouestions" component={Questions}/>
+        <Route path="/entrance" component={Entrance}/>
         <Route  path="/" component={Home} />
     </Switch>
   );

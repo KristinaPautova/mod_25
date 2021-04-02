@@ -19,8 +19,8 @@ export const ResetPassword = ({mail, pass, repeatPass, setMail, setPass, setRepe
 
     let validPass;
     useEffect(() => {
-        validPass = pass == repeatPass;
-        mailErr=="" && passErr=="" && repeatPassErr=="" ? setButActive(true) : setButActive(false)
+        validPass = pass === repeatPass;
+        mailErr==="" && passErr==="" && repeatPassErr==="" ? setButActive(true) : setButActive(false)
     })
 
     if(resetPassSuccess) return ( <Redirect to="/" /> )
@@ -32,7 +32,7 @@ export const ResetPassword = ({mail, pass, repeatPass, setMail, setPass, setRepe
             <Link to="/">
             <img src={closeImg} className="close"/>
             </Link>
-                    <img src={login} />
+                    <img src={login}  />
                     <h2>Форма для восстановления пароля</h2>
                     <span className={serverErr || mailErr || passErr ? "is-valid" : ""}>{
                     serverErr ? serverErr : validPassErr ? "Пароли не совпадают" : "Неправильная почта или пароль"}</span>

@@ -30,9 +30,9 @@ export const onResetPassword = (validPass, setValidPassErr, setPassErr, setRepea
                 return response.text()
                 .then(text => {
                     setServerErr(text);
-                    text == "Такая почта не зарегистрирована" || text == "Запроса на сброс пароля от вас не поступало" ?
+                    text === "Такая почта не зарегистрирована" || text === "Запроса на сброс пароля от вас не поступало" ?
                     setMailErr(true) : setMailErr(false);
-                    if(text == "Новый пароль должен отличаться от старого") 
+                    if(text === "Новый пароль должен отличаться от старого")
                     { setPassErr(true); setRepeatPassErr(true) } 
                     else { setPassErr(false); setRepeatPassErr(false) };
                 })

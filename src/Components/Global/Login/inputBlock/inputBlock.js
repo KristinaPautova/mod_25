@@ -4,7 +4,7 @@ const InputBlock = ({type, text, value, setState, mail, isValid, setValid, serve
     let [isFocus, setFocus] = React.useState(false);
 
     useEffect(()=> {
-        if(document.querySelector("input").value != "") document.querySelector("label").classList.add("is-focus");
+        if(document.querySelector("input").value !== "") document.querySelector("label").classList.add("is-focus");
     })
 
     return (
@@ -16,10 +16,10 @@ const InputBlock = ({type, text, value, setState, mail, isValid, setValid, serve
         {setValid(false)}}}
         className={isValid || serverErr ? "is-valid" : ""}
         onFocus={() => setFocus(true)} 
-        onBlur={e => {if(e.target.value=="") {setFocus(false)};
+        onBlur={e => {if(e.target.value==="") {setFocus(false)}
         e.target.value.length > 5 && (mail ? /\w+@\w+\.\w+/.test(e.target.value) : true) ? setValid(false) : setValid(true)}}/>
         <label className={!isFocus && !isValid ? "" : isFocus && isValid ? "is-focus is-valid" : isFocus ? "is-focus" : isValid ? "is-valid" : ""}>{text}</label>
-        {pass ? <div class="wrapper">
+        {pass ? <div className="wrapper">
                     <div className="forget-pass" onClick={onClickForgetPass}>Забыли?</div>
                 </div> : ""}
     </div>
