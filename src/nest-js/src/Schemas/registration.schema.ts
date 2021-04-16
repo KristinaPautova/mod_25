@@ -59,6 +59,9 @@ export const registrationSchema =  new Schema({
         type: String
     },
     imgAvatar: {
-        type: String
+        type: String,
+    },
+    photosDoc: {
+        type: Array
     }
 })

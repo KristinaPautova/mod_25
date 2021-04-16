@@ -6,9 +6,10 @@ import { Body, Controller, Post, HttpCode, Response, Query } from '@nestjs/commo
 export class LoginController  {
     constructor(private LoginService: LoginService) {}
     @Post('access')
-    @HttpCode(200)
-    auth(@Body() authLoginDto: AuthLoginDto) {
-        return this.LoginService.authorize(authLoginDto);
+
+    auth(@Body() authLoginDto: AuthLoginDto, @Response() res: any) {
+        console.log(authLoginDto)
+        return this.LoginService.authorize(authLoginDto, res);
     }
 
     @Post('pass-recovery')

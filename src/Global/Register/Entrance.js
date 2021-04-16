@@ -9,7 +9,7 @@ const Entrance = () => {
         <Fragment>
             <div className="entrance">
                 <div className="entrance__container">
-                    <Link to="/" className="entrance__container_close" alt="logo" rel="nofollow"><img src={close} alt="close"/></Link>
+                    <div className="entrance__container-close" ><img src={close} alt="close"/></div>
                 <div className="entrance__container_wrapper">
                     <img src={login} alt="men and table"/>
                     <h3>Авторизация</h3>

@@ -13,6 +13,12 @@
     font-family: "Roboto Bold";
 }
 
+Link{
+    font-size: 16px;
+    line-height: 18.8px;
+    font-family: "Roboto Regular";
+}
+
 h1 {
     font-size: 64px;
     line-height: 76.8px;

@@ -14,7 +14,7 @@ const Header = () => {
                 <nav className="menu__frame is-desktop">
                     <Link to="/" className="menu__frame-site" alt="logo" rel="nofollow"><img src={logo} alt="Logotype"/></Link>
                     <Link to="/about" className="menu__frame-link is-animated is-active"  rel="nofollow">О нас</Link>
-                    <Link to="/" className="menu__frame-link is-animated"  rel="nofollow">Условия</Link>
+                    <Link to="/lease" className="menu__frame-link is-animated"  rel="nofollow">Условия</Link>
                     <Link to="/qouestions" className="menu__frame-link is-animated" rel="nofollow">Частые вопросы</Link>
                     <button  className="menu__frame-button is-animated" target="_blank" rel="nofollow" onClick={() => setIsVisible(true)}>Войти</button>
                 </nav>

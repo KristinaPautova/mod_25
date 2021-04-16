@@ -6,12 +6,12 @@ const sendMail = (name, link, mail) => {
       port: 465,
       secure: true, 
       auth: { 
-        user: "skilldrive@bk.ru", 
-        pass: "naomi4357" }
+        user: "skilldrive2@mail.ru", 
+        pass: "naomi2534" }
     });
   
     return transporter.sendMail({
-      from: "skilldrive@bk.ru", 
+      from: "skilldrive2@mail.ru", 
       to: mail, 
       subject: "Вы запрашивали сброс пароля в SkillDrive", 
       text: "Вы запрашивали сброс пароля?", 
@@ -27,9 +27,10 @@ const sendMail = (name, link, mail) => {
 </pre>
 <pre>
 <span>Если вы не запрашивали это изменение, то проигнорируйте письмо.</span>
-</pre>
-`
-    })
-  }
+</pre> `
+  })
+}
 
 module.exports = sendMail;
+
+

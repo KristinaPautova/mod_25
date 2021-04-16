@@ -10,7 +10,7 @@ export class checkMailMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const {mail} = req.body;
     let findMail : any = await this.userModel.findOne( {mail} ).exec();
-    if(!findMail) return res.status(401).send("Такая почта не зарегистрирована");
+    if(!findMail) return res.status(400).send();
     next();
   }
 }

@@ -13,7 +13,9 @@ const getNewToken = require("../../config/getNewToken")
 export class LoginService {
     constructor ( @InjectModel('Users') private registrationModel: Model<RegistrationDocument> ) {}
 
-    async authorize(req) { getNewToken(req); }
+    async authorize(req, res) { 
+        getNewToken(req, res); 
+    }
 
     async sendMail(req) {
         const {mail} = req;
@@ -26,16 +28,16 @@ export class LoginService {
     async resetNewPass(req, res, query) {
         const {mail} = req;
         const findUser : any = await this.registrationModel.findOne( {mail} ).exec();
-        if(findUser.idRecovery != query.id) return res.status(401).send("Запроса на сброс пароля от вас не поступало");
-
+        if(findUser.idRecovery != query.id) return res.status(401).send("От вас запроса не поступало");
+        
         bcrypt.compare(req.password, findUser.password, function(err, result) {
-            if(result) return res.status(400).send("Новый пароль должен отличаться от старого");
-            console.log(bcrypt.hashSync(req.password, bcrypt.genSaltSync(10)));
+            if(result) return res.status(401).send("Новый пароль должен отличаться от старого");
             findUser.password = bcrypt.hashSync(req.password, bcrypt.genSaltSync(10))
             return findUser.save()
             .then(() => {
-                getNewToken(req);
-                res.status(200).send()})
+                getNewToken(req, res);
+                
+                })
             .catch(err => console.log(err))
         }
         )
