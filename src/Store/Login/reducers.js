@@ -1,76 +1,45 @@
-import { CHANGE_LOGIN_MAIL_TEXT, CHANGE_LOGIN_PASSWORD_TEXT, 
-    CHANGE_LOGIN_BUTTON_ACTIVITY, CHANGE_LOGIN_BUTTON_LOAD, 
-    SET_FORM_FOR_SEND, SET_FORM_MAIL_SENT,
-    SET_LOGIN_ERR_MAIL, SET_LOGIN_ERR_PASSWORD, SET_LOGIN_ERR_SERVER,
-    LOGIN_OPEN_OR_CLOSE
-     } 
-from "./actions";
+import { createReducer } from "@reduxjs/toolkit";
 
-const defaultState = {
-    mailLogin: '',
-    passwordLogin: '',
-    buttonActiveLogin: false,
-    buttonLoadLogin: false,
-    isFormForSend: false,
-    isFormMailSent: false,
-    errMailLogin: null,
-    errPasswordLogin: null,
-    errServerLogin: '',
-    loginIsClose: true
-}
+import { defaultState } from './defaultState';
+import * as actions from './actions';
 
-export const login = (state = defaultState, action) => {
-    switch(action.type) {
-        case CHANGE_LOGIN_MAIL_TEXT:
-            return {
-                ...state,
-                mailLogin: action.payload,
-            };
-        case CHANGE_LOGIN_PASSWORD_TEXT:
-            return {
-                ...state,
-                passwordLogin: action.payload,
-            };
-        case CHANGE_LOGIN_BUTTON_ACTIVITY:
-            return {
-                ...state,
-                buttonActiveLogin: action.payload,
-            };
-        case CHANGE_LOGIN_BUTTON_LOAD:
-            return {
-                ...state,
-                buttonLoadLogin: action.payload,
-            };
-        case SET_FORM_FOR_SEND:
-            return {
-                ...state,
-                isFormForSend: action.payload,
-            };
-        case SET_FORM_MAIL_SENT:
-            return {
-                ...state,
-                isFormMailSent: action.payload,
-            };
-        case SET_LOGIN_ERR_MAIL:
-            return {
-                ...state,
-                errMailLogin: action.payload,
-            };
-        case SET_LOGIN_ERR_PASSWORD:
-            return {
-                ...state,
-                errPasswordLogin: action.payload,
-            };
-        case SET_LOGIN_ERR_SERVER:
-            return {
-                ...state,
-                errServerLogin: action.payload,
-            };
-        case LOGIN_OPEN_OR_CLOSE:
-            return {
-                ...state,
-                loginIsClose: action.payload,
-            };
-    default: return state;
-        }
-}
+export const login = createReducer( defaultState, {
+    [actions.closeLogin]: (state, action) => { state.loginIsClose = action.payload; },
+    [actions.setFormForSend]: (state, action) => { state.isFormForSend = action.payload; },
+    [actions.setButtonActive]: (state, action) => { state.buttonActive = action.payload; },
+//Авторизация
+    [actions.onAuthRequest]: (state) => { 
+        state.buttonLoad = state.buttonLoad ? false : true
+    },
+    [actions.onAuthSuccess]: (state) => { 
+        state.loginIsClose = true;
+        state.errorServer = false;
+    },
+    [actions.onAuthFailure]: (state, action) => { 
+        state.errorServer = action.payload;
+    },
+//Запрос на спецссылку
+    [actions.onForgetPassRequest]: (state) => { 
+        state.buttonLoad = state.buttonLoad ? false : true
+    },
+    [actions.onForgetPassSuccess]: (state) => { 
+        state.isFormMailSent = true;
+        state.isFormForSend = false;
+        state.errorServer = false;
+    },
+    [actions.onForgetPassFailure]: (state, action) => { 
+        state.errorServer = action.payload;
+    },
+//Сброс пароля
+    [actions.onResetPassRequest]: (state) => { 
+        state.buttonLoad = state.buttonLoad ? false : true
+    },
+    [actions.onResetPassSuccess]: (state) => { 
+        state.resetPassSuccess = true;
+        state.buttonLoad = false;
+    },
+    [actions.onResetPassFailure]: (state, action) => { 
+        state.errorServer = action.payload;
+    },
+})
+

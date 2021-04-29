@@ -2,19 +2,12 @@ import { connect } from 'react-redux';
 import { AllForms } from '../../Components/Global/Login/inputBlock/AllForms';
 
 import { setLoginErrMail, setLoginErrPassword, setLoginErrServer, 
-    setLoginMail, setLoginPassword, closeLogin, setFormForSend } 
+    setLoginMail, setLoginPassword, closeLogin, setFormForSend, onAuth, onForgetPass } 
 from '../../Store/Login/actions';
 
 const mapStateToProps = state => {
-    return {
-        mailLogin: state.login.mailLogin,
-        passwordLogin: state.login.passwordLogin,
-        isFormForSend: state.login.isFormForSend,
-        isFormMailSent: state.login.isFormMailSent,
-        errMailLogin: state.login.errMailLogin,
-        errPasswordLogin: state.login.errPasswordLogin,
-        errServerLogin: state.login.errServerLogin,
-    };
+    const { login } = state;
+    return  login;
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -24,7 +17,9 @@ const mapDispatchToProps = dispatch => ({
     setLoginErrPassword: text => dispatch(setLoginErrPassword(text)),
     setLoginErrServer: text => dispatch(setLoginErrServer(text)),
     closeLogin: text => dispatch(closeLogin(text)),
-    setFormForSend: text => dispatch(setFormForSend(text))
+    setFormForSend: text => dispatch(setFormForSend(text)),
+    onAuth: text => dispatch(onAuth(text)),
+    onForgetPass: text => dispatch(onForgetPass(text))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllForms);

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
-import closeImg from '../../../img/close.svg';
-import back from '../../../img/back.svg';
-import login from '../../../img/login.svg';
-import forgetPass from '../../../img/forget-pass.svg';
-import sentMail from '../../../img/sentMail.svg';
+import closeImg from '../../../Assets/img/close.svg';
+import back from '../../../Assets/img/back.svg';
+import login from '../../../Assets/img/login.svg';
+import forgetPass from '../../../Assets/img/forget-pass.svg';
+import sentMail from '../../../Assets/img/sentMail.svg';
 import { Link } from 'react-router-dom';
 
 import AllForms from '../../../Containers/Login/AllForms';
-import OnSubmit from '../../../Containers/Login/OnSubmit';
 
 export const Login = ({loginIsClose, closeLogin, isFormForSend, isFormMailSent, 
     errMailLogin, errPasswordLogin, setLoginButtonActive, setFormMailSent, setFormForSend}) => {
@@ -27,15 +26,19 @@ export const Login = ({loginIsClose, closeLogin, isFormForSend, isFormMailSent,
                 {isFormMailSent ? "" :isFormForSend ? <img className="modal__container-nav-back" src={ back } alt="Закрыть" onClick={changeForm}/> : ""}
                 <img className="modal__container-nav-close" src={ closeImg } alt="Закрыть" onClick={() => {closeLogin(true); setTimeout(() => {setFormMailSent(false)}, 300);}}/>
             </div>
-            <img className="modal__container-img" src={ isFormMailSent ? sentMail : isFormForSend ? forgetPass : login}/>
+            <img className="modal__container-img" 
+            src={ isFormMailSent ? sentMail : isFormForSend ? forgetPass : login}
+            
+            />
             <AllForms />
-            <OnSubmit />
+            {/* <OnSubmit /> */}
             {isFormMailSent || isFormForSend ? "" : <div className="modal__container-rect"></div>}
-            {isFormForSend || isFormMailSent ? "" : <Link to="/step1" onClick={() => closeLogin(true)}>Зарегистрироваться</Link>}
+
+            {isFormForSend || isFormMailSent ? "" : <Link to="/registration" 
+            onClick={() => closeLogin(true)}>Зарегистрироваться</Link>}
         </div>
         </div>
         <div className={loginIsClose ? "plug is-disable" : "plug"} />
     </>
     )
 }
-export default Login;

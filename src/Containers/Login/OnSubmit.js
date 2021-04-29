@@ -5,14 +5,8 @@ import { setLoginErrServer, setFormForSend, setFormMailSent, closeLogin, setLogi
 from '../../Store/Login/actions';
 
 const mapStateToProps = state => {
-    return {
-        mailLogin: state.login.mailLogin,
-        passwordLogin: state.login.passwordLogin,
-        isFormForSend: state.login.isFormForSend,
-        isFormMailSent: state.login.isFormMailSent,
-        buttonActiveLogin: state.login.buttonActiveLogin,
-        buttonLoadLogin: state.login.buttonLoadLogin
-    };
+    const { login } = state;
+    return  login;
 }
 
 const mapDispatchToProps = dispatch => ({

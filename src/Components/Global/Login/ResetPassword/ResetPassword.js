@@ -1,55 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import InputBlock from '../inputBlock/InputBlock';
-import login from '../../../../img/Login.svg';
-import closeImg from '../../../../img/close.svg';
+import login from '../../../../Assets/img/login.svg';
+import closeImg from '../../../../Assets/img/close.svg';
 import { Link } from 'react-router-dom';
-import { onResetPassword } from './onResetPassword';
+
 import { Redirect } from 'react-router';
+import { useForm  } from 'react-hook-form';
 
-export const ResetPassword = ({mail, pass, repeatPass, setMail, setPass, setRepeatPass}) => {
+export const ResetPassword = ({ userData, 
+    onResetPass, 
+    buttonLoad, 
+    resetPassSuccess, 
+    errorServer }) => {
 
-    let [mailErr, setMailErr] = useState(undefined);
-    let [passErr, setPassErr] = useState(undefined);
-    let [repeatPassErr, setRepeatPassErr] = useState(undefined);
-    let [serverErr, setServerErr] = useState(undefined);
-    let [butActive, setButActive] = useState(false);
-    let [validPassErr, setValidPassErr] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(false);
+    const [submitLocked, setSubmitUnlock] = useState(false);
 
-    let [resetPassSuccess, setResetPassSuccess] = useState(false);
+    const triggerForSubmit = () => {
+        let isNotEmpty = Object.values(getValues())
+        .every(el => el.length >= 6);
 
-    let validPass;
+        isNotEmpty && !Object.values(errors).length 
+        ? setSubmitUnlock(true) : setSubmitUnlock(false) 
+    }
+
+    const { register, handleSubmit, getValues, errors } = useForm({
+        mode: 'onTouched',
+        defaultValues: userData ? userData : false
+    });
+
+    
     useEffect(() => {
-        validPass = pass === repeatPass;
-        mailErr==="" && passErr==="" && repeatPassErr==="" ? setButActive(true) : setButActive(false)
+        try { 
+            setErrorMessage(Object.values(errors)[Object.values(errors).length-1].message);
+        } catch (err) {}
     })
 
     if(resetPassSuccess) return ( <Redirect to="/" /> )
-
     return (
         <>
         <div className="reset-container">
-            <form className="reset-form">
+            <div className="reset-form">
             <Link to="/">
             <img src={closeImg} className="close"/>
             </Link>
-                    <img src={login}  />
-                    <h2>Форма для восстановления пароля</h2>
-                    <span className={serverErr || mailErr || passErr ? "is-valid" : ""}>{
-                    serverErr ? serverErr : validPassErr ? "Пароли не совпадают" : "Неправильная почта или пароль"}</span>
+                <img src={login} />
+                <h2>Форма для восстановления пароля</h2>
+                <span className={Object.values(errors).length || errorServer ? "is-valid" : ""}>{
+                Object.values(errors).length && errorMessage 
+                ? errorMessage : (errorServer ? errorServer : "")}</span>
+                <form onSubmit={handleSubmit(()=>onResetPass(getValues()))}>
 
-                        < InputBlock type="text" mail text="Введите почту" value={mail} 
-                        isValid={mailErr} setValid={setMailErr} setState={setMail}/>
-                        < InputBlock type="password" text="Введите новый пароль" value={pass} 
-                        isValid={passErr} setValid={setPassErr} setState={setPass}/>
-                        < InputBlock type="password" text="Повторите новый пароль" value={repeatPass} 
-                        isValid={repeatPassErr} setValid={setRepeatPassErr} setState={setRepeatPass}/>
-
-                    <button className={!butActive ? "is-disable" : ""} onClick={
-                        e => {e.preventDefault(); 
-                            onResetPassword(validPass, setValidPassErr, setPassErr, setRepeatPassErr, 
-                            setResetPassSuccess, setServerErr, setMailErr, mail, pass)}
-                    }>Сбросить пароль</button>
-            </form>
+                    < InputBlock type="text" mail label="Введите почту" name="mail" autoComplete="on"
+                    errorName={errors.mail} triggerForSubmit={ triggerForSubmit }
+                    ref={register({ required: true, pattern: /\w+@\w+\.\w\w+/ })}/>
+                    < InputBlock type="password" label="Введите новый пароль" name="password" resetPass
+                    errorName={errors.password} triggerForSubmit={ triggerForSubmit }
+                    ref={register({ required: true, minLength: 6 })} />
+                    < InputBlock type="password" label="Повторите новый пароль" name="passwordRepeat" resetPass 
+                    errorName={errors.passwordRepeat} triggerForSubmit={ triggerForSubmit }
+                    ref={register({ required: true, minLength: 6, validate: value => value == getValues().password })}/>
+                    
+                    <div className="button-wrapper">
+                        <button className={submitLocked ? "" : "is-disable"}>
+                            {buttonLoad ? " " : "Сбросить пароль"}
+                        </button>
+                        <div className="cssload-container">
+                        <div className={buttonLoad 
+                            ? "cssload-zenith animate" : "cssload-zenith"}></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         </>
     )

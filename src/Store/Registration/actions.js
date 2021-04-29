@@ -1,104 +1,213 @@
-export const CHANGE_NAME_TEXT = 'CHANGE_NAME_TEXT';
-export const CHANGE_MAIL_TEXT = 'CHANGE_MAIL_TEXT';
-export const CHANGE_PASSWORD_TEXT = 'CHANGE_PASSWORD_TEXT';
-export const CHANGE_BIRTHDAY_TEXT = 'CHANGE_BIRTHDAY_TEXT';
-export const CHANGE_PHONE_TEXT = 'CHANGE_PHONE_TEXT';
-export const CHANGE_PASSPORT_TEXT = 'CHANGE_PASSPORT_TEXT';
-export const CHANGE_PASSPORT_DATE_TEXT = 'CHANGE_PASSPORT_DATE_TEXT';
-export const CHANGE_PASSPORT_ORGAN_TEXT = 'CHANGE_PASSPORT_ORGAN_TEXT';
-export const CHANGE_PASSPORT_CODE_TEXT = 'CHANGE_PASSPORT_CODE_TEXT';
-export const CHANGE_DRIVER_TEXT = 'CHANGE_DRIVER_TEXT';
-export const CHANGE_DRIVER_DATE_TEXT = 'CHANGE_DRIVER_DATE_TEXT';
+import * as c from './constants';
+import * as error from '../Constants/Errors';
 
-export const CHANGE_REG_BUTTON_ACTIVITY = 'CHANGE_REG_BUTTON_ACTIVITY';
-export const CHANGE_BUTTON_LOAD = 'CHANGE_BUTTON_LOAD';
-export const CHANGE_REDIRECT = 'CHANGE_REDIRECT';
-export const CHANGE_ALL_VALID = 'CHANGE_ALL_VALID';
+const createAction = type => payload => ({ type, payload });
+import { onSubmitGET, onSubmitPOST } from '../Submits';
 
-export const CHANGE_WARNING_TEXT = 'CHANGE_WARNING_TEXT';
-export const CHANGE_ERR_MAIL_TEXT = 'CHANGE_ERR_MAIL_TEXT';
 
-export const setName = (text) => ({
-    type: CHANGE_NAME_TEXT,
-    payload: text
-})
+/*All inputs in step1*/
 
-export const setMail = (text) => ({
-    type: CHANGE_MAIL_TEXT,
-    payload: text
-})
+export const setAllValid = createAction(c.CHANGE_ALL_VALID);
+export const setErrMail = createAction(c.CHANGE_ERR_MAIL_TEXT);
+export const setUserData = createAction(c.SET_USER_DATA);
 
-export const setPassword = (text) => ({
-    type: CHANGE_PASSWORD_TEXT,
-    payload: text
-})
+/*Step2*/
+export const setImgAvatarFile = createAction(c.SET_IMG_AVATAR_FILE);
+export const setImgAvatarUrl = createAction(c.SET_IMG_AVATAR_URL);
+export const setImgAvatarLoad = createAction(c.SET_IMG_AVATAR_LOAD);
 
-export const setBirthday = (text) => ({
-    type: CHANGE_BIRTHDAY_TEXT,
-    payload: text
-})
+export const setStep3Request = () => ({ type: c.SET_STEP3_REQUEST });
+export const setStep3Success = data => ({ type: c.SET_STEP3_SUCCESS, payload: data });
+export const setStep3Failure = error => ({ type: c.SET_STEP3_FAILURE, payload: error })
 
-export const setPhone = (text) => ({
-    type: CHANGE_PHONE_TEXT,
-    payload: text
-})
+export const uploadAvatarRequest = () => ({ type: c.UPLOAD_AVATAR_REQUEST });
+export const uploadAvatarSuccess = data => ({ type: c.UPLOAD_AVATAR_SUCCESS, payload: data });
+export const uploadAvatarFailure = error => ({ type: c.UPLOAD_AVATAR_FAILURE, payload: error })
 
-export const setPassport = (text) => ({
-    type: CHANGE_PASSPORT_TEXT,
-    payload: text
-})
+export const changeDocItem = createAction(c.CHANGE_DOC_ITEM);
 
-export const setPassportDate = (text) => ({
-    type: CHANGE_PASSPORT_DATE_TEXT,
-    payload: text
-})
+export const uploadAvatar = () => {
 
-export const setPassportOrgan = (text) => ({
-    type: CHANGE_PASSPORT_ORGAN_TEXT,
-    payload: text
-})
+    return (dispatch, getStore) => {
+        const formData = new FormData();
+        formData.append('file', getStore().registration.imgAvatarFile);
+        dispatch(uploadAvatarRequest());
 
-export const setPassportCode = (text) => ({
-    type: CHANGE_PASSPORT_CODE_TEXT,
-    payload: text
-})
+        fetch('http://localhost:8000/users/registration/uploadAvatar'
+        , { method: "POST", body: formData })
+        .then(response => {
+            if(!response.ok) {
+                return (
+                    dispatch(uploadAvatarRequest())
+                    , dispatch(uploadAvatarFailure(error.CODE_500_PHOTO))
+                    , setTimeout(() => { dispatch(uploadAvatarFailure(false)) }, 3000) )};
+            response.json()
+            .then(json=> {
+                dispatch(uploadAvatarSuccess(json));
+                dispatch(setImgAvatarUrl({
+                    img: json.img,
+                    url: `http://localhost:8000/static/avatar/${json.img}`
+                }
+                    ))
+            })
+        },
+            error => {
+                dispatch(uploadAvatarFailure(error)), 
+                setTimeout(() => { dispatch(uploadAvatarFailure("Не удалось загрузить фото. Попробуйте ещё раз")) }, 2000)})
+        }
+}
+export const setStep1 = createAction(c.SET_STEP1);
+export const setStep2 = createAction(c.SET_STEP2);
+export const setStep3 = createAction(c.SET_STEP3);
 
-export const setDriver = (text) => ({
-    type:CHANGE_DRIVER_TEXT,
-    payload: text
-})
+export const toStep3 = () => 
+    onSubmitGET( 'http://localhost:8000/users/registration/tostep3', 
+        setStep3Request,
+        setStep3Success,
+        setStep3Failure )
 
-export const setDriverDate = (text) => ({
-    type: CHANGE_DRIVER_DATE_TEXT,
-    payload: text
-})
+/*Step3*/
 
-export const setRegButtonActive = (text) => ({
-    type: CHANGE_REG_BUTTON_ACTIVITY,
-    payload: text
-})
+export const setRedirect = createAction(c.CHANGE_REDIRECT);
+export const setPhotoDoc = createAction(c.SET_PHOTO_DOC);
+export const removePhotoDoc = createAction(c.REMOVE_PHOTO_DOC);
+export const setImgDocFile = createAction(c.SET_IMG_DOC_FILE);
 
-export const setRedirect = (boolean) => ({
-    type: CHANGE_REDIRECT,
-    payload: boolean
-})
+export const setPhotoDocRequest = () => ({ type: c.SET_PHOTO_DOC_REQUEST });
+export const setPhotoDocSuccess = data => ({ type: c.SET_PHOTO_DOC_SUCCESS, payload: data });
+export const setPhotoDocFailure = error => ({ type: c.SET_PHOTO_DOC_FAILURE, payload: error })
+export const setSumDocsSize = createAction(c.SET_SUM_DOCS_SIZE);
+export const addPhotoDoc = () => {
+    
+    return (dispatch, getStore) => {
+        const formData = new FormData();
+        Object.values(getStore().registration.imgDocFile).map(el => {
+            formData.append('uploadDocs', el)
+        })
+        dispatch(setPhotoDocRequest());
+        fetch('http://localhost:8000/users/registration/uploadDocs'
+        , { method: "POST", 
+        body: formData })
+        .then(response => {
+            if(!response.ok) {
+                return (dispatch(setPhotoDocRequest())
+                , dispatch(setPhotoDocFailure(error.CODE_500_PHOTO))
+                , setTimeout(() => { dispatch(setPhotoDocFailure(false)) }, 3000) )};
+            response.json()
+            .then(json=> {
+                dispatch(setPhotoDocSuccess(json));
+                let sumDocsSize = [];
+                let docsArr = [];
+                
+                Object.values(json).map(el => {
+                    docsArr.push({
+                        imgUrl:`http://localhost:8000/static/docs/${el.img}`,
+                        imgName: el.img,
+                        imgSize: el.size,
+                        imgExt: el.extension
+                    });
+                })
+                sumDocsSize = docsArr.concat(getStore().registration.photosDoc)
+                .map(el => Number(el.imgSize))
+                .reduce((accumulator, currentValue) => accumulator + currentValue ).toFixed(2);
 
-export const setButtonLoad = (boolean) => ({
-    type: CHANGE_BUTTON_LOAD,
-    payload: boolean
-})
+                if(sumDocsSize > 30) return (
+                    dispatch(finishRegFailure(error.VERY_SIZE_DOCS))
+                    , setTimeout(() => { dispatch(finishRegFailure(false)) }, 2000)
+                    );
+                dispatch(setPhotoDoc(docsArr));
+            })
+        },
+            error => {
+                dispatch(setPhotoDocFailure(error.CODE_102_PHOTO)), 
+                setTimeout(() => { dispatch(setPhotoDocFailure(false)) }, 2000)})
+        }
+}
 
-export const setAllValid = (boolean) => ({
-    type: CHANGE_ALL_VALID,
-    payload: boolean
-})
+export const setRegButtonActive1 = createAction(c.SET_REG_BUTTON_ACTIVE1);
+export const setRegButtonActive2 = createAction(c.SET_REG_BUTTON_ACTIVE2);
+export const setRegButtonActive3 = createAction(c.SET_REG_BUTTON_ACTIVE3);
 
-export const setWarning = (boolean) => ({
-    type: CHANGE_WARNING_TEXT,
-    payload: boolean
-})
+export const setButtonLoad = createAction(c.CHANGE_BUTTON_LOAD);
+export const setWarning = createAction(c.CHANGE_WARNING_TEXT);
 
-export const setErrMail = (text) => ({
-    type: CHANGE_ERR_MAIL_TEXT,
-    payload: text
-})
+export const step1FormsRequest = () => ({ type: c.SET_STEP1_FORMS_REQUEST });
+export const step1FormsSuccess = data => ({ type: c.SET_STEP1_FORMS_SUCCESS, payload: data });
+export const step1FormsFailure = error => ({ type: c.SET_STEP1_FORMS_FAILURE, payload: error })
+
+export const submitFormsStep1 = data => {
+    return (dispatch) => {
+    dispatch(step1FormsRequest());
+    fetch("http://localhost:8000/users/registration/step1", {
+        method: 'POST',  
+        headers: { 'Content-Type': 'application/json' },  
+        body: JSON.stringify(data) })
+    .then(response => {
+        dispatch(step1FormsRequest())
+        if(!response.ok) {
+            return response.status == "401"
+            ? (dispatch(step1FormsFailure(error.CODE_401))
+            , dispatch(setErrMail(error.CODE_401))
+            , setTimeout(() => { dispatch(setPhotoDocFailure(false)) }, 3000) )
+            : (dispatch(step1FormsFailure(error.CODE_500))
+            , setTimeout(() => { dispatch(setPhotoDocFailure(false)) }, 3000) )
+        } else {
+            dispatch(step1FormsSuccess())
+            , dispatch(setUserData(data))
+        }
+    },
+    err => {
+        dispatch(step1FormsRequest());
+        console.log(err);
+        dispatch(step1FormsFailure(error.FAILED_TO_FETCH))
+        , setTimeout(() => { dispatch(setPhotoDocFailure(false)) }, 3000);
+    })
+}
+}
+
+export const finishRegRequest = () => ({ type: c.FINISH_REG_REQUEST });
+export const finishRegSuccess = data => ({ type: c.FINISH_REG_SUCCESS, payload: data });
+export const finishRegFailure = error => ({ type: c.FINISH_REG_FAILURE, payload: error })
+
+export const setFinishReg = () => {
+    
+    return (dispatch, getStore) => {
+        let photosDoc = getStore().registration.photosDoc;
+        let imgAvatar = getStore().registration.imgAvatar.img;
+        let userData = getStore().registration.userData;
+        let fullUserData = {...userData};
+        fullUserData.imgAvatar = imgAvatar;
+        fullUserData.photosDoc = Object.values(photosDoc)
+        .map(el => el = el.imgName);
+
+        dispatch(finishRegRequest());
+        fetch("http://localhost:8000/users/registration/toSuccess", {
+            method: 'POST',  
+            headers: { 'Content-Type': 'application/json' },  
+            body: JSON.stringify(fullUserData) })
+            .then(response => {
+                dispatch(finishRegRequest());
+                if(!response.ok) {
+                    (dispatch(finishRegFailure(error.CODE_500))
+                    , setTimeout(() => { dispatch(finishRegFailure(false)) }, 3000) )
+                } else {
+                    return response.json()
+                    .then(json => {
+                       dispatch(finishRegSuccess());
+                       localStorage.setItem("accessToken", json.accessToken);
+                       localStorage.setItem("refreshToken", json.refreshToken);
+                    })
+                }
+            },
+            err => {
+                dispatch(finishRegRequest());
+                console.log(err);
+                dispatch(finishRegFailure(error.FAILED_TO_FETCH))
+                , setTimeout(() => { dispatch(finishRegFailure(false)) }, 3000);
+                }
+            )
+    
+}
+}
+
+export const setFinishRegFalse = createAction(c.SET_FINISH_REG);
