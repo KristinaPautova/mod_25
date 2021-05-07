@@ -12,7 +12,7 @@ export const registrationSchema =  new Schema({
         required: true
     },
     birthday: {
-        type: String,
+        type: Array,
         maxlength: 10,
         minlength: 10,
         required: true

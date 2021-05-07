@@ -16,7 +16,7 @@ const Reviews = () => {
                         <img src={left}/>
                     </a>
                     <div className="review__container__slide-rect">
-                        <div className="wrapper is-active">
+                         <div className="wrapper is-active">
                         <img src={ men } alt="Ivan Ivanov"/>
                         <div className="wrapper__text">
                             <span className="wrapper__text-name">Иван Иванов</span>
