@@ -16,3 +16,57 @@
     margin-right: 289px;
 
 }
+
+h2{
+    margin: 0 auto; 
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
+.block{
+    display: flex;
+    justify-content:center;
+    margin-top: 50px;
+
+}
+
+.button{
+    overflow: visible;
+    padding: 16px 27px;
+    border-radius: 6px;
+    width: 158px;
+    background: #61A199;
+    color: white;
+    border: 0;
+}
+
+.formBlock{
+    width: 329px;
+    border-radius: 6px 0 0 6px;
+    display: block;
+    border: 1px  solid #E0E0E0;
+}
+
+.formBlockDate{
+    display: block;
+    border: 1px  solid #E0E0E0;
+}
+
+.isMini{
+    border:none;
+}
+
+.iconVector{
+    padding-left: 30px;
+    margin: 15px 12px 12px 15px;
+}
+
+.formBlockTwo{
+    width: 329px;
+    border-radius: 0 6px 6px 0;
+    display: block;
+    border: 1px  solid #E0E0E0;
+}

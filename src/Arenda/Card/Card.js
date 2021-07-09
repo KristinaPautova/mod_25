@@ -6,9 +6,9 @@ import CreateCar from './CardShow';
 
 const Card = () => {
     return (
-        <Fragment>
+        <Fragment> 
             <div className="card">
-            <h3>Рекомендуем поблизости</h3>
+            <h3 className="cart">Рекомендуем поблизости</h3>
             {cars.map(car => {
                 return (
                     <CreateCar car={car} key={car.name + Math.random()} />

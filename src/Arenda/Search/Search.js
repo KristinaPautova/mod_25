@@ -8,13 +8,14 @@ const Search = () => (
         <div className={css.block}>
                 <input className={css.formBlock} type="text" placeholder="Санкт-Петербург"/>
                 <div className={css.formBlockDate}>
-                    <img src={calendar} className={css.iconVector}/>
-                    <input className={css.isMini}/>
+                <input className={css.isMini}  placeholder="05.06.20 – 08.06.20"/>
+                <img src={calendar} className={css.iconVector}/>
+
                 </div>
-                <input className={css.formBlock} type="text" placeholder="Легковые"/>
+                <input className={css.formBlockTwo} type="text" placeholder="Легковые"/>
                 <button className={css.button}>Найти</button>
         </div>
-    </main>
+    </main> 
 )
 
 export default Search;

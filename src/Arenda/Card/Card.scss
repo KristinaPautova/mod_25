@@ -1,0 +1,24 @@
+.card{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+
+    h3{
+        flex-direction: column;
+        padding: 100px 438px 50px 397px;
+        margin: 0 auto;
+    }
+
+    .card-block{
+
+        flex: 1 1 160px;
+
+    }
+
+    // .card-block-img{
+    //     display: flex;
+    //     flex-direction: row;
+    //     justify-content:space-around;
+
+    // }
+}
